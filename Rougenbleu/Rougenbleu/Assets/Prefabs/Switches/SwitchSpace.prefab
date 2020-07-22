@@ -54,6 +54,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -95,7 +96,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7054009046034273212
 Transform:
   m_ObjectHideFlags: 0
@@ -132,6 +133,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -173,7 +175,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5466938038254701638
 Transform:
   m_ObjectHideFlags: 0
@@ -210,6 +212,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -251,7 +254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1888657434630516483
 Transform:
   m_ObjectHideFlags: 0
@@ -288,6 +291,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -329,7 +333,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3572349941948436553
 Transform:
   m_ObjectHideFlags: 0
@@ -366,6 +370,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -400,11 +405,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4571997034953271822}
   - component: {fileID: 9073645346622397696}
-  - component: {fileID: 5416046280376405017}
-  - component: {fileID: 4052916099083555273}
+  - component: {fileID: 8140832925185962440}
+  - component: {fileID: 306960950}
   m_Layer: 0
   m_Name: SwitchSpace
-  m_TagString: Untagged
+  m_TagString: Switch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -442,36 +447,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5416046280376405017
-MonoBehaviour:
+--- !u!65 &8140832925185962440
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8177092239018770526}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45d0ed0307e79a146a41717e64072596, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coordinates: {x: 0, y: 0}
-  type: 0
-  baseMaterials:
-  - {fileID: 2100000, guid: 6e9fc0d7047e31a48a7f991551eee570, type: 2}
-  - {fileID: 2100000, guid: 99f2025c847c8b44abe8baef5f3e3d2e, type: 2}
-  - {fileID: 2100000, guid: 0709e61fdc4ca3d41ad32c518743480e, type: 2}
-  spaceColors:
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 1}
-  - {r: 0, g: 0, b: 0, a: 1}
-  - {r: 0.7647059, g: 0.7647059, b: 0.7647059, a: 1}
-  wall: {fileID: 4056009698691430104, guid: 67f4dcf2663d7b3489317aba1b93aee9, type: 3}
-  inwardCornerWall: {fileID: 7093702541766105084, guid: 34b265d7ac38cc5468ec01c3bf887fcd,
-    type: 3}
-  outwardCornerWall: {fileID: 1609939260780330901, guid: ec20e12d16b8f624bab48bee17bf2f46,
-    type: 3}
-  isSwitch: 0
---- !u!114 &4052916099083555273
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.1, z: 0.25}
+  m_Center: {x: 0, y: 0.6, z: 0}
+--- !u!114 &306960950
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -483,6 +472,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a9b82b6bb21a6e42971f33509a732f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  switchColor: 0
+  switchMats:
+  - {fileID: 2100000, guid: a1cb6037b51e90043a8805e55de7afe4, type: 2}
+  - {fileID: 2100000, guid: 4a1976c50aedfb14888937b0c2ed0f67, type: 2}
+  meshRenderer: {fileID: 6343856887179958868}
 --- !u!1 &8178667845205043206
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,7 +494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2104836277588395042
 Transform:
   m_ObjectHideFlags: 0
@@ -537,6 +531,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

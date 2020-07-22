@@ -54,6 +54,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -132,6 +133,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -210,6 +212,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -288,6 +291,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -366,6 +370,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -464,11 +469,23 @@ MonoBehaviour:
   - {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 1}
   - {r: 0, g: 0, b: 0, a: 1}
   - {r: 0.7647059, g: 0.7647059, b: 0.7647059, a: 1}
-  wall: {fileID: 4056009698691430104, guid: 67f4dcf2663d7b3489317aba1b93aee9, type: 3}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 1, a: 1}
+  - {r: 0.24705882, g: 0.24705882, b: 0.24705882, a: 1}
+  wall: {fileID: 3063762352296320893, guid: 67f4dcf2663d7b3489317aba1b93aee9, type: 3}
   inwardCornerWall: {fileID: 7093702541766105084, guid: 34b265d7ac38cc5468ec01c3bf887fcd,
     type: 3}
-  outwardCornerWall: {fileID: 1609939260780330901, guid: ec20e12d16b8f624bab48bee17bf2f46,
+  outwardCornerWall: {fileID: 4999596210540528984, guid: 008faa66ddd5d0949b70ec295666c736,
     type: 3}
+  switchSpace: {fileID: 8177092239018770526, guid: 58256e78354df7041b61f27d9c314ec5,
+    type: 3}
+  ceilingTile: {fileID: 9141674369661209571, guid: 86468a852a526ba48a1e5032b0fbab92,
+    type: 3}
+  rightDoorway: {fileID: 1735522892606680884, guid: 6336bc5e7f8b7f44e84b782f0dad8577,
+    type: 3}
+  leftDoorway: {fileID: 5821671336396364381, guid: 99e170ed590fe444cb84d64133dd9e56,
+    type: 3}
+  isSwitch: 0
 --- !u!1 &4729817878542198534
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +540,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

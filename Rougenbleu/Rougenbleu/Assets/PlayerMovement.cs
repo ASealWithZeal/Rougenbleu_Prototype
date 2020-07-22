@@ -124,5 +124,13 @@ public class PlayerMovement : MonoBehaviour
     private void MoveInDirection(Vector3 moveDirection)
     {
         controller.Move(moveDirection * speed * Time.deltaTime);
+        //transform.position += (moveDirection * speed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("ENTER");
+        if (other.gameObject.tag == "Switch")
+            other.gameObject.GetComponent<FloorSwitch>().ChangeColor();
     }
 }

@@ -63,16 +63,29 @@ public class Grid : MonoBehaviour
 
     private Color[] GetSurroundingPixels(Vector2Int coordinates, Color[] pixels)
     {
-        int index = coordinates.x + (coordinates.y * levelImage.width);
-        Color[] surroundingColors = new Color[4];
-        if (index - levelImage.width >= 0)
-            surroundingColors[0] = pixels[index - levelImage.width];
-        if (index + levelImage.width < pixels.Length)
-            surroundingColors[1] = pixels[index + levelImage.width];
-        if (coordinates.x - 1 >= 0)
-            surroundingColors[2] = pixels[index - 1];
-        if (coordinates.x + 1 < (pixels.Length / levelImage.height))
-            surroundingColors[3] = pixels[index + 1];
+        int center = coordinates.x + (coordinates.y * levelImage.width);
+        int index = 0;
+        Color[] surroundingColors = new Color[9];
+        //if (index - levelImage.width >= 0)
+        //    surroundingColors[0] = pixels[index - levelImage.width];
+        //if (index + levelImage.width < pixels.Length)
+        //    surroundingColors[1] = pixels[index + levelImage.width];
+        //if (coordinates.x - 1 >= 0)
+        //    surroundingColors[2] = pixels[index - 1];
+        //if (coordinates.x + 1 < (pixels.Length / levelImage.height))
+        //    surroundingColors[3] = pixels[index + 1];
+
+        // Populates all pixels surrounding the central one, including the center
+        for (int i = 1; i >= -1; --i)
+            for (int j = 1; j >= -1; --j)
+            {
+                if (center - ((levelImage.width * i) + j) >= 0 && center - ((levelImage.width * i) + j) < (levelImage.width * levelImage.height))
+                    surroundingColors[index] = pixels[center - ((levelImage.width * i) + j)];
+                else
+                    surroundingColors[index] = new Color();
+
+                ++index;
+            }
 
         return surroundingColors;
     }
