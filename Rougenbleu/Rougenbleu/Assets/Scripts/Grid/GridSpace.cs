@@ -7,7 +7,7 @@ public enum SpaceType
     Ground = 0,
     Pit,
     Wall,
-    Ceiling
+    Ceiling,
 }
 
 public class GridSpace : MonoBehaviour
@@ -23,6 +23,8 @@ public class GridSpace : MonoBehaviour
 
     [Header("Tile Objects")]
     public GameObject wall;
+    public GameObject box;
+    public GameObject pit;
     public GameObject inwardCornerWall;
     public GameObject outwardCornerWall;
     public GameObject switchSpace;
@@ -56,8 +58,10 @@ public class GridSpace : MonoBehaviour
         else if (pixelColor.Equals(spaceColors[2]))
         {
             type = SpaceType.Pit;
-            transform.position = new Vector3(coordinates.x, -1, coordinates.y);
-            transform.GetChild(0).GetComponent<Renderer>().material = baseMaterials[2];
+
+            // Destroys the box and replaces it with a pit
+            DestroyImmediate(transform.GetChild(0).gameObject);
+            GameObject g = Instantiate(pit, new Vector3(coordinates.x, -1, coordinates.y), Quaternion.identity, transform);
         }
 
         // Ceiling
@@ -73,7 +77,7 @@ public class GridSpace : MonoBehaviour
                     canDrawCeiling = false;
 
             // Turns all floor tiles black, for use in doors and other "void" areas
-            transform.GetChild(0).GetComponent<MeshRenderer>().material = baseMaterials[2];
+            transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material = baseMaterials[2];
             if (canDrawCeiling)
             {
                 Instantiate(ceilingTile, new Vector3(coordinates.x, ceilingTile.transform.position.y, coordinates.y), ceilingTile.transform.rotation, transform);
@@ -91,7 +95,7 @@ public class GridSpace : MonoBehaviour
             GameObject g = Instantiate(switchSpace, new Vector3(coordinates.x, 0, coordinates.y), Quaternion.identity, transform);
 
             // Destroys the space's old top space, which is now unecessary (MAY RETURN WHEN I GET BETTER SWITCHES)
-            DestroyImmediate(transform.GetChild(0).gameObject);
+            DestroyImmediate(transform.GetChild(0).GetChild(0).gameObject);
 
             if (pixelColor.Equals(spaceColors[4]))
                 g.GetComponent<FloorSwitch>().InstantiateSwitch(SwitchColor.Red);
@@ -143,15 +147,15 @@ public class GridSpace : MonoBehaviour
         {
             // Creates a left-facing wall
             if (surroundingColors[3] != spaceColors[3] && (surroundingColors[5] == new Color() || surroundingColors[5] == spaceColors[3]))
-                CreateWall(true, 0, Quaternion.Euler(0, 90, 0), null);
+                CreateWall(true, 0, Quaternion.Euler(0, 90, 0), surroundingColors);
 
             // Creates a right-facing wall
             else if (surroundingColors[5] != spaceColors[3] && (surroundingColors[3] == new Color() || surroundingColors[3] == spaceColors[3]))
-                CreateWall(true, 0, Quaternion.Euler(0, -90, 0), null);
+                CreateWall(true, 0, Quaternion.Euler(0, -90, 0), surroundingColors);
 
             // Creates a straight wall
             else
-                CreateWall(false, 0, Quaternion.Euler(0, 0, 0), null);
+                CreateWall(false, 0, Quaternion.Euler(0, 0, 0), surroundingColors);
         }
 
         // Checks if there are walls to the left and right of the current one, but NOT above or below
@@ -159,15 +163,15 @@ public class GridSpace : MonoBehaviour
         {
             // Creates an up-facing wall
             if (surroundingColors[1] != null && (surroundingColors[7] == new Color() || surroundingColors[7] == spaceColors[3]))
-                CreateWall(true, 0, Quaternion.Euler(0, 0, 0), null);
+                CreateWall(true, 0, Quaternion.Euler(0, 0, 0), surroundingColors);
 
             // Creates a down-facing wall
             else if (surroundingColors[7] != null && (surroundingColors[1] == new Color() || surroundingColors[1] == spaceColors[3]))
-                CreateWall(true, 0, Quaternion.Euler(0, 180, 0), null);
+                CreateWall(true, 0, Quaternion.Euler(0, 180, 0), surroundingColors);
 
             // Creates a straight wall
             else
-                CreateWall(false, 0, Quaternion.Euler(0, 0, 0), null);
+                CreateWall(false, 0, Quaternion.Euler(0, 0, 0), surroundingColors);
         }
 
         // If there are two walls, check to determine their setup
@@ -180,12 +184,17 @@ public class GridSpace : MonoBehaviour
                     borderedByCeiling = true;
                     continue;
                 }
-        
+
             if (borderedByCeiling)
                 CreateWall(true, 1, DetermineAngleFromSurroundings(1, surroundingColors), surroundingColors);
-        
+
             else
-                CreateWall(true, 2, DetermineAngleFromSurroundings(2, surroundingColors), null);
+                CreateWall(true, 2, DetermineAngleFromSurroundings(2, surroundingColors), surroundingColors);
+        }
+
+        else if (CheckForDiagonalWalls(directions, surroundingColors))
+        {
+            CheckForAdjacentPits(surroundingColors, 3);
         }
     }
 
@@ -307,6 +316,8 @@ public class GridSpace : MonoBehaviour
             {
                 g = Instantiate(wall, new Vector3(coordinates.x, 1, coordinates.y), wall.transform.rotation, transform);
                 g.transform.localPosition = new Vector3(0, 0.5f, 0.20725f);
+
+                CheckForAdjacentPits(surroundingColors, 0);
             }
 
             // Inward-facing corner wall
@@ -314,12 +325,17 @@ public class GridSpace : MonoBehaviour
             {
                 g = Instantiate(inwardCornerWall, new Vector3(coordinates.x - 1f, 0, coordinates.y - 1.5f), inwardCornerWall.transform.rotation, transform);
                 RemoveExtraWalls(g, surroundingColors);
+
+                CheckForAdjacentPits(surroundingColors, 1);
             }
 
             // Outward-facing corner wall
             else if (type.Equals(2))
+            {
                 g = Instantiate(outwardCornerWall, new Vector3(coordinates.x - 1f, 0, coordinates.y), outwardCornerWall.transform.rotation, transform);
-
+                CheckForAdjacentPits(surroundingColors, 2);
+            }
+            
             g.transform.localPosition += new Vector3(0, 0, 0.5f);
             transform.rotation = angle;
         }
@@ -382,6 +398,71 @@ public class GridSpace : MonoBehaviour
         }
     }
 
+    // If there are any pits next to the wall's space
+    private void CheckForAdjacentPits(Color[] surroundingColors, int type)
+    {
+        bool[] directions = new bool[9];
+        bool hori = false, vert = false, corner = false;
+
+        // Normal walls
+        if (type.Equals(0))
+        {
+            if (surroundingColors[3].Equals(spaceColors[2]) || surroundingColors[5].Equals(spaceColors[2]))
+                hori = true;
+
+            else if (surroundingColors[1].Equals(spaceColors[2]) || surroundingColors[7].Equals(spaceColors[2]))
+                hori = true;
+        }
+
+        // Inward walls
+        else if (type.Equals(1))
+        {
+            if (surroundingColors[0].Equals(spaceColors[2]) || surroundingColors[2].Equals(spaceColors[2])
+            || surroundingColors[6].Equals(spaceColors[2]) || surroundingColors[8].Equals(spaceColors[2]))
+                vert = hori = true;
+        }
+        
+        // Outward walls
+        else if (type.Equals(2))
+        {
+            if (surroundingColors[0].Equals(spaceColors[2]) || surroundingColors[2].Equals(spaceColors[2])
+            || surroundingColors[6].Equals(spaceColors[2]) || surroundingColors[8].Equals(spaceColors[2]))
+                corner = true;
+        }
+
+        // Unseen part of the outward walls
+        else if (type.Equals(3))
+        {
+            if (surroundingColors[3].Equals(spaceColors[2]) || surroundingColors[5].Equals(spaceColors[2]))
+                vert = true;
+
+            else if (surroundingColors[1].Equals(spaceColors[2]) || surroundingColors[7].Equals(spaceColors[2]))
+                hori = true;
+        }
+
+        if (hori || vert || corner)
+            SetUpWallPit(hori, vert, corner);
+    }
+
+    // Moves the blocks adjacent to a wall to create a pit, if possible
+    private void SetUpWallPit(bool hori, bool vert, bool corner)
+    {
+        // Destroys the box and replaces it with a pit
+        DestroyImmediate(transform.GetChild(0).gameObject);
+        GameObject g = Instantiate(pit, new Vector3(coordinates.x, -1, coordinates.y), Quaternion.identity, transform);
+
+        if (!corner)
+        {
+            if (hori)
+                g.transform.GetChild(1).gameObject.SetActive(true);
+
+            if (vert)
+                g.transform.GetChild(2).gameObject.SetActive(true);
+        }
+        else
+            g.transform.GetChild(3).gameObject.SetActive(true);
+    }
+
     #endregion
 
     #region Doorway Creation
@@ -419,11 +500,11 @@ public class GridSpace : MonoBehaviour
         {
             // Creates a left-facing doorway
             if (surroundingColors[3] != spaceColors[3] && (surroundingColors[5] == new Color() || surroundingColors[5] == spaceColors[3]))
-                CreateDoorway(1, Quaternion.Euler(0, 90, 0));
+                CreateDoorway(0, Quaternion.Euler(0, 90, 0));
 
             // Creates a right-facing doorway
             if (surroundingColors[5] != spaceColors[3] && (surroundingColors[3] == new Color() || surroundingColors[3] == spaceColors[3]))
-                CreateDoorway(0, Quaternion.Euler(0, -90, 0));
+                CreateDoorway(1, Quaternion.Euler(0, -90, 0));
         }
 
         // If the doorway is above its neighbor:
@@ -431,11 +512,11 @@ public class GridSpace : MonoBehaviour
         {
             // Creates a left-facing doorway
             if (surroundingColors[3] != spaceColors[3] && (surroundingColors[5] == new Color() || surroundingColors[5] == spaceColors[3]))
-                CreateDoorway(0, Quaternion.Euler(0, 90, 0));
+                CreateDoorway(1, Quaternion.Euler(0, 90, 0));
 
             // Creates a right-facing doorway
             if (surroundingColors[5] != spaceColors[3] && (surroundingColors[3] == new Color() || surroundingColors[3] == spaceColors[3]))
-                CreateDoorway(1, Quaternion.Euler(0, -90, 0));
+                CreateDoorway(0, Quaternion.Euler(0, -90, 0));
         }
 
         // If the doorway is on the right:
