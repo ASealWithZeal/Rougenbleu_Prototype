@@ -8,6 +8,7 @@ public class Grid : MonoBehaviour
     private GridSpace[,] grid;
     public GameObject gridSpace;
     public Texture2D levelImage;
+    public GridTexturer texturer;
 
     public static Grid _instance;
 
@@ -94,5 +95,12 @@ public class Grid : MonoBehaviour
     public SpaceType GetSpaceType(Vector2Int c)
     {
         return grid[c.x, c.y].type;
+    }
+
+    // Textures all spaces in the grid
+    public void TextureEnvironment()
+    {
+        for (int i = 0; i < transform.childCount; ++i)
+            transform.GetChild(i).GetComponent<GridSpace>().TextureSpace(texturer);
     }
 }
